@@ -499,6 +499,48 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
+const GITHUB_USER = "Dev-web-med";
+const GITHUB_REPO = "site-web";
+const BRANCH = "main";
+async function openDocs(carteNum, type){
+  const folderPath = `documents/carte${carteNum}/${type}`;
+  const apiUrl = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${folderPath}?ref=${BRANCH}`;
+  document.getElementById('modalTitle').innerText = `⏳ كنجبد ملفات ${type}...`;
+  document.getElementById('docBar').innerHTML = `<p style="color:#fff; padding:20px;">⏳ جاري التحميل...</p>`;
+  document.getElementById('docModal').style.display = "block";
+  document.body.style.overflow = "hidden";
+  try{
+    const res = await fetch(apiUrl);
+    if(!res.ok) throw new Error("خاوي");
+    const files = await res.json();
+    const validFiles = files.filter(f => f.type === 'file');
+    if(validFiles.length === 0) throw new Error("خاوي");
+    const icons = { pdf:"📕", word:"📘", ppt:"📊" };
+    document.getElementById('modalTitle').innerText = `${icons[type]} Carte ${carteNum} - ${type.toUpperCase()} (${validFiles.length})`;
+    const bar = document.getElementById('docBar'); bar.innerHTML = "";
+    validFiles.forEach((f, i) => {
+      const div = document.createElement('div'); div.className = "doc-item"; div.innerHTML = `${icons[type]} ${f.name}`;
+      div.onclick = () => {
+        document.querySelectorAll('#docBar .doc-item').forEach(d=>d.classList.remove('active')); div.classList.add('active');
+        const frame = document.getElementById('docFrame');
+        if(type === 'pdf'){ frame.src = f.download_url; } else { frame.src = `https://docs.google.com/gview?url=${encodeURIComponent(f.download_url)}&embedded=true`; }
+      };
+      bar.appendChild(div); if(i===0) setTimeout(()=>div.click(), 100);
+    });
+  }catch(err){
+    document.getElementById('docBar').innerHTML = `<div style="color:#fff; padding:20px;"><p>📭 ما كاين حتى ملف فـ:</p><code style="background:rgba(255,255,255,.1); padding:6px; border-radius:6px; display:block; margin:10px 0;">${folderPath}</code></div>`;
+  }
+}
+function closeDocModal(){ document.getElementById('docModal').style.display="none"; document.body.style.overflow="auto"; document.getElementById('docFrame').src=""; }
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.project-card').forEach(card => {
+    const numEl = card.querySelector('.project-number'); if(!numEl) return; const carteNum = numEl.textContent.trim();
+    card.querySelectorAll('.file-button').forEach(btn => {
+      let type = 'pdf'; if(btn.classList.contains('word')) type='word'; if(btn.classList.contains('ppt')) type='ppt';
+      btn.addEventListener('click', (e) => { e.preventDefault(); openDocs(carteNum, type); });
+    });
+  });
+});
 
 
 
