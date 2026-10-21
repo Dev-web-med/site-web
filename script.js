@@ -543,10 +543,14 @@ async function openDocs(carteNum, type){
 function openPdfFull(name, url, type){
   document.getElementById('pdfFullTitle').innerText = name;
   const frame = document.getElementById('pdfFullFrame');
-  frame.src = `https://docs.google.com/gview?url=${encodeURIComponent(url)}&embedded=true`;
+  
+  // قارئ Mozilla الرسمي - كيخلي PDF يتقرا فالصفحة
+  const viewerUrl = `https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodeURIComponent(url)}`;
+  frame.src = viewerUrl;
+  
   document.getElementById('pdfFullModal').style.display = "flex";
   document.getElementById('smallBarModal').style.display = "none";
-}
+
 
 }
 
