@@ -1921,6 +1921,5 @@ html[data-theme="day"] nav {
         transition-duration: 0.01ms !important;
     }
 }
-#docBar .doc-item{padding:12px; margin:6px 0; border-radius:10px; background:rgba(255,255,255,.05); color:#fff; cursor:pointer; border:1px solid transparent; transition:.2s; font-size:13px;}
-#docBar .doc-item.active{background:rgba(212,175,55,.25); border-color:#d4af37; color:#d4af37;}
+
 
