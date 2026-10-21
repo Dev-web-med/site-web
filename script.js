@@ -504,7 +504,7 @@ async function openDocs(carteNum, type){
   const apiUrl = `https://api.github.com/repos/Dev-web-med/site-web/contents/${folderPath}?ref=main`;
   
   document.getElementById('smallBarTitle').innerText = `${type.toUpperCase()} - Carte ${carteNum}`;
-  document.getElementById('docList').innerHTML = `<p style="color:#fff; text-align:center;">⏳ كنجبد...</p>`;
+  document.getElementById('docList').innerHTML = `<p style="color:#fff; text-align:center;">⏳ ...</p>`;
   document.getElementById('smallBarModal').style.display = "block";
   document.body.style.overflow = "hidden";
 
@@ -518,12 +518,12 @@ async function openDocs(carteNum, type){
       return {name:f.name, url: pagesUrl};
     });
   }catch(e){
-    document.getElementById('docList').innerHTML = `<p style="color:#ff8; padding:15px; text-align:center;">📭 خاوي</p>`;
+    document.getElementById('docList').innerHTML = `<p style="color:#ff8; padding:15px; text-align:center;">📭 vide</p>`;
     return;
   }
 
   if(files.length===0){
-    document.getElementById('docList').innerHTML = `<p style="color:#fff; text-align:center;">📭 ما كاين والو</p>`;
+    document.getElementById('docList').innerHTML = `<p style="color:#fff; text-align:center;">📭 vide</p>`;
     return;
   }
 
