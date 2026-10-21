@@ -22,11 +22,50 @@
     <!-- ================= HEADER ================= -->
     <header class="site-header" id="top">
 
-        <a class="brand" href="#accueil" aria-label="MEJ, accueil">
-            <span class="brand-mark" aria-hidden="true"><span>MEJ</span></span>
-            <span class="brand-divider"></span>
-            <strong>MEJ</strong>
-        </a>
+     <a class="brand" href="#accueil" aria-label="MEJ, accueil">
+  <span class="brand-mark" id="mejLogoBox" aria-hidden="true" style="background:none; border:none; padding:0; width:48px; height:48px; display:inline-flex; position:relative; overflow:hidden;">
+    <img id="logoNight" src="assets/logo-gold.jpeg" alt="MEJ" style="position:absolute; width:48px; height:48px; object-fit:contain; transition:opacity .3s; opacity:1;">
+    <img id="logoDay" src="assets/logo-silver.jpeg" alt="MEJ" style="position:absolute; width:48px; height:48px; object-fit:contain; transition:opacity .3s; opacity:0;">
+  </span>
+  <span class="brand-divider"></span>
+  <strong>MEJ</strong>
+</a>
+
+<script>
+// هاد السكريبت كيقلب على الثيم الحقيقي ديال السيت ديالك
+function updateMejLogo(){
+  const night = document.getElementById('logoNight');
+  const day = document.getElementById('logoDay');
+  if(!night || !day) return;
+
+  // قلب على أي علامة ديال النهار
+  const isLight = document.documentElement.classList.contains('light') ||
+                  document.documentElement.getAttribute('data-theme') === 'light' ||
+                  document.body.classList.contains('light-mode') ||
+                  document.body.classList.contains('light') ||
+                  document.documentElement.classList.contains('light-mode');
+
+  if(isLight){
+    night.style.opacity = '0';
+    day.style.opacity = '1';
+    day.style.filter = 'drop-shadow(0 0 6px rgba(120,180,255,.4))';
+  }else{
+    night.style.opacity = '1';
+    day.style.opacity = '0';
+    night.style.filter = 'drop-shadow(0 0 6px rgba(255,215,0,.5))';
+  }
+}
+
+// 1. ملي كتحل الصفحة
+document.addEventListener('DOMContentLoaded', updateMejLogo);
+
+// 2. ملي كتكليكي على بوطون الليل/نهار (كنراقبو أي تبديل فالكلاس)
+new MutationObserver(updateMejLogo).observe(document.documentElement, {attributes:true, attributeFilter:['class','data-theme']});
+new MutationObserver(updateMejLogo).observe(document.body, {attributes:true, attributeFilter:['class']});
+
+// 3. زيد هاد السطر حدا البوطون ديالك ديال الثيم باش يتأكد
+setInterval(updateMejLogo, 500);
+</script>
 
     <nav class="main-nav" id="mainNav" aria-label="Navigation principale">
             <a class="active" href="#accueil">Accueil</a>
@@ -567,7 +606,18 @@
         <a href="#top">↑ &nbsp;Retour en haut</a>
 
     </footer>
-
+<div id="docModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.85); z-index:99999; padding:15px;">
+  <div style="background:#0a1931; width:100%; max-width:1050px; margin:0 auto; height:90vh; border-radius:16px; display:flex; flex-direction:column; overflow:hidden; border:1px solid #d4af37;">
+    <div style="padding:15px 20px; background:#08142a; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(212,175,55,.3);">
+      <h3 id="modalTitle" style="color:#d4af37; margin:0;">📁 Documents</h3>
+      <button onclick="closeDocModal()" style="background:#d4af37; border:none; width:32px; height:32px; border-radius:50%; cursor:pointer; font-weight:bold;">✕</button>
+    </div>
+    <div style="display:flex; flex:1; overflow:hidden;">
+      <div id="docBar" style="width:300px; min-width:260px; background:#08142a; border-right:1px solid rgba(212,175,55,.2); overflow-y:auto; padding:10px;"></div>
+      <div style="flex:1; background:#fff; display:flex;"><iframe id="docFrame" src="" style="flex:1; border:none; width:100%;"></iframe></div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
 
